@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .chat-container {
+        height: 55vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .message {
+        max-width: 80%;
+        margin-bottom: 1rem;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+    .message-user {
+        background-color: var(--accent);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+    }
+    .message-bot {
+        background-color: var(--msg-bot-bg);
+        color: var(--text-main);
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+    }
+    .chat-container::-webkit-scrollbar { width: 6px; }
+    .chat-container::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    
+    /* Modern Chat Input Engine */
+    .chat-input-wrapper {
+        display: flex;
+        align-items: stretch;
+        background-color: var(--component-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 28px;
+        padding: 0.35rem 0.4rem 0.35rem 1.25rem;
+        transition: all 0.2s ease;
+    }
+    
+    [data-theme="dark"] .chat-input-wrapper {
+        background-color: #1e293b; /* base */
+        background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)); /* Brighter overlay */
+        border-color: #475569;
+    }
+    
+    .chat-input-wrapper:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    
+    .chat-input {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 0.5rem 0 0;
+        flex: 1;
+        color: var(--text-main) !important;
+        font-size: 0.95rem;
+        outline: none;
+    }
+    
+    .chat-input::placeholder {
+        color: var(--text-muted);
+        opacity: 0.8;
+    }
+    
+    .btn-send {
+        border-radius: 22px;
+        padding: 0.4rem 1.25rem;
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+    
+    .btn-send:hover {
+        background-color: var(--primary-hover);
+    }
+    
+    .btn-send:active {
+        transform: scale(0.96);
+    }
+</style>
+
+<div class="row justify-content-center mt-2">
+    <div class="col-lg-8">
+        <div class="clean-card overflow-hidden">
+            
+            <div class="bg-white p-3 border-bottom d-flex align-items-center">
+                <div class="bg-light rounded d-flex align-items-center justify-content-center me-3 border" style="width: 38px; height: 38px;">
+                    <i class="bi bi-robot text-dark"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-semibold text-dark">CareBot</h6>
+                    <small class="text-muted" style="font-size: 0.75rem;">Support Assistant</small>
+                </div>
+            </div>
+
+            <div id="chat-box" class="chat-container bg-white">
+                <div class="message message-bot">
+                    Hi {{ session.get('username') }}. I'm here to listen. How are you feeling right now?
+                </div>
+            </div>
+            
+            <div class="bg-white p-3 border-top">
+                <form id="chat-form" class="m-0">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="user-input" class="chat-input" placeholder="Message CareBot..." required autocomplete="off">
+                        <button type="submit" class="btn-send shadow-sm">
+                            Send <i class="bi bi-send-fill" style="font-size: 0.85rem"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+
+    function appendMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message');
+        msgDiv.classList.add(sender === 'user' ? 'message-user' : 'message-bot');
+        msgDiv.textContent = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const messageText = userInput.value.trim();
+        if (!messageText) return;
+        
+        appendMessage(messageText, 'user');
+        userInput.value = '';
+        
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: messageText })
+            });
+            const data = await response.json();
+            
+            setTimeout(() => {
+                appendMessage(data.response, 'bot');
+            }, 600); 
+            
+        } catch (error) {
+            appendMessage("Connection error.", 'bot');
+        }
+    });
+</script>
+{% endblock %}

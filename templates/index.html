@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mb-5 pb-2">
+    <h1 class="fw-semibold mb-2 text-dark">Welcome, {{ username }}</h1>
+    <p class="text-muted mx-auto mb-0" style="max-width: 500px;">How can we support your mental well-being today?</p>
+</div>
+
+<div class="row g-4 justify-content-center">
+    <!-- Mood -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/mood" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-emoji-smile fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">Track Mood</h6>
+                <p class="text-muted small mb-0">Record your feelings to understand patterns.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Chat -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/chat" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-robot fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">Assistant Chat</h6>
+                <p class="text-muted small mb-0">Talk to CareBot for advice and support.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Booking -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/book" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-calendar3 fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">Book Session</h6>
+                <p class="text-muted small mb-0">Schedule time securely with a professional.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- History -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/history" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-clock-history fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">View History</h6>
+                <p class="text-muted small mb-0">Review past emotional data and trends.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Tips -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/tips" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-journal-text fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">Resources</h6>
+                <p class="text-muted small mb-0">Read established guidelines for self-care.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Analytics -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/analytics" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start">
+                <i class="bi bi-bar-chart fs-4 mb-3 text-dark"></i>
+                <h6 class="fw-semibold mb-1 text-dark">Analytics</h6>
+                <p class="text-muted small mb-0">Visualize emotional trends with Chart.js.</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Emergency -->
+    <div class="col-lg-4 col-md-6">
+        <a href="/emergency" class="text-decoration-none">
+            <div class="clean-card p-4 h-100 d-flex flex-column text-start bg-light border-0">
+                <i class="bi bi-telephone fs-4 mb-3 text-danger"></i>
+                <h6 class="fw-semibold mb-1 text-danger">Get Help Now</h6>
+                <p class="text-muted small mb-0">Immediate numbers and support protocols.</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

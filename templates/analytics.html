@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-2">
+    <div class="col-lg-9">
+        <div class="text-center mb-4">
+            <h5 class="fw-semibold text-dark mb-1">Mood Analytics</h5>
+            <p class="text-muted small">Visualize your emotional trends.</p>
+        </div>
+        
+        <div class="clean-card p-4 p-md-5">
+            {% if labels %}
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="moodChart"></canvas>
+            </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const labels = {{ labels | tojson }};
+                const dataPoints = {{ data | tojson }};
+                const moodNames = {{ mood_names | tojson }};
+                
+                const ctx = document.getElementById('moodChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Mood Level',
+                            data: dataPoints,
+                            borderColor: '#0F172A',
+                            backgroundColor: 'rgba(15, 23, 42, 0.05)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#0F172A',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                backgroundColor: '#0F172A',
+                                padding: 12,
+                                titleFont: { family: 'Inter', size: 13 },
+                                bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        let index = context.dataIndex;
+                                        return moodNames[index].charAt(0).toUpperCase() + moodNames[index].slice(1);
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 6,
+                                ticks: {
+                                    stepSize: 1,
+                                    font: { family: 'Inter', size: 11 },
+                                    color: '#64748B',
+                                    callback: function(value) {
+                                        const labels = {
+                                            1: 'Depressed  ',
+                                            2: 'Sad/Anxious  ',
+                                            3: 'Stressed  ',
+                                            5: 'Happy  '
+                                        };
+                                        return labels[value] || '';
+                                    }
+                                },
+                                grid: {
+                                    color: '#E2E8F0',
+                                    drawBorder: false,
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { family: 'Inter', size: 11 },
+                                    color: '#64748B'
+                                },
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+            {% else %}
+            <div class="text-center py-5 my-4">
+                <i class="bi bi-bar-chart fs-1 text-muted opacity-50 mb-3 d-inline-block"></i>
+                <p class="text-muted small mb-3">Not enough data to map analytical trends.</p>
+                <a href="/mood" class="btn btn-primary px-4 fw-medium">Log First Mood</a>
+            </div>
+            {% endif %}
+            
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="/history" class="text-decoration-none text-muted small fw-medium"><i class="bi bi-table me-2"></i>View Raw Log Data</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-2">
+    <style>
+        /* Table Global Reset */
+        .history-table {
+            background-color: transparent;
+        }
+        .timestamp-text {
+            color: var(--text-main);
+        }
+        
+        /* Dark Mode Strict Table Overrides */
+        [data-theme="dark"] .clean-card {
+            background-color: #1e293b !important;
+        }
+        [data-theme="dark"] .history-table {
+            background-color: #1e293b !important;
+            color: #f9fafb !important;
+        }
+        [data-theme="dark"] .history-table thead th {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            border-bottom: 2px solid #334155 !important;
+        }
+        [data-theme="dark"] .history-table tbody tr:nth-child(odd) td {
+            background-color: #0f172a !important;
+            color: #e5e7eb !important;
+            border-color: #334155 !important;
+        }
+        [data-theme="dark"] .history-table tbody tr:nth-child(even) td {
+            background-color: #1e293b !important;
+            color: #e5e7eb !important;
+            border-color: #334155 !important;
+        }
+        
+        /* Dynamic Tag Badge Styles (Light Mode defaults) */
+        .mood-badge {
+            border: 1px solid transparent;
+        }
+        .mood-badge[data-mood="happy"] {
+            background-color: #d1fae5; color: #065f46; border-color: #a7f3d0;
+        }
+        .mood-badge[data-mood="sad"] {
+            background-color: #e0f2fe; color: #0369a1; border-color: #bae6fd;
+        }
+        .mood-badge[data-mood="stressed"] {
+            background-color: #fef3c7; color: #92400e; border-color: #fde68a;
+        }
+        .mood-badge[data-mood="anxious"] {
+            background-color: #fee2e2; color: #991b1b; border-color: #fecaca;
+        }
+        .mood-badge[data-mood="depressed"] {
+            background-color: #f3f4f6; color: #4b5563; border-color: #e5e7eb;
+        }
+
+        /* Dark Mode Tag Badge Overrides */
+        [data-theme="dark"] .mood-badge[data-mood="happy"] {
+            background-color: #059669 !important; color: #ffffff !important; border-color: #047857 !important;
+        }
+        [data-theme="dark"] .mood-badge[data-mood="sad"] {
+            background-color: #334155 !important; color: #e2e8f0 !important; border-color: #475569 !important;
+        }
+        [data-theme="dark"] .mood-badge[data-mood="stressed"] {
+            background-color: #f59e0b !important; color: #111827 !important; border-color: #d97706 !important;
+        }
+        [data-theme="dark"] .mood-badge[data-mood="anxious"] {
+            background-color: #991b1b !important; color: #ffffff !important; border-color: #7f1d1d !important;
+        }
+        [data-theme="dark"] .mood-badge[data-mood="depressed"] {
+            background-color: #1f2937 !important; color: #e5e7eb !important; border-color: #374151 !important;
+        }
+    </style>
+    <div class="col-lg-8">
+        <div class="text-center mb-4">
+            <h5 class="fw-semibold text-dark mb-1">Mood History</h5>
+            <p class="text-muted small">A chronological record of your past logs.</p>
+        </div>
+        
+        <div class="clean-card overflow-hidden">
+            {% if history %}
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle history-table">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 border-bottom-0 text-muted small fw-medium">Timestamp</th>
+                            <th class="pe-4 py-3 border-bottom-0 text-muted small fw-medium text-end">Feeling</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in history %}
+                        <tr>
+                            <td class="ps-4 py-3 timestamp-text small">{{ record.timestamp }}</td>
+                            <td class="pe-4 py-3 text-end">
+                                <span class="badge px-3 py-1 fw-medium mood-badge" data-mood="{{ record.mood|lower }}" style="border-radius: 6px;">{{ record.mood|capitalize }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted small mb-3">You haven't logged any moods yet.</p>
+                <a href="/mood" class="btn btn-light px-4 border">Log Mood</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

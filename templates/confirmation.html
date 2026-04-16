@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-5 col-md-7">
+        <div class="clean-card p-4 p-md-5 text-center">
+            
+            <i class="bi bi-calendar-check fs-1 text-dark mb-3"></i>
+            <h5 class="fw-semibold mb-2 text-dark">Booking Confirmed</h5>
+            <p class="text-muted small mb-4">Your appointment details are below.</p>
+            
+            <div class="text-start border rounded-3 p-4 mb-4 bg-light mx-auto">
+                <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                    <span class="text-muted small">Name</span>
+                    <span class="fw-medium text-dark small">{{ booking.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                    <span class="text-muted small">Date</span>
+                    <span class="fw-medium text-dark small">{{ booking.date }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted small">Time</span>
+                    <span class="fw-medium text-dark small">{{ booking.time }}</span>
+                </div>
+            </div>
+            
+            <a href="/" class="btn btn-primary w-100 py-2">Done</a>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
